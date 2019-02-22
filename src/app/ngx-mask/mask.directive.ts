@@ -104,6 +104,14 @@ export class MaskDirective implements ControlValueAccessor {
   }
 
   @Input()
+  public set showOnFocus(value: IConfig['showOnFocus']) {
+    if (!value) {
+      return;
+    }
+    this._maskService.showOnFocus = value;
+  }
+
+  @Input()
   public set shownMaskExpression(value: IConfig['shownMaskExpression']) {
     if (!value) {
       return;
@@ -152,6 +160,10 @@ export class MaskDirective implements ControlValueAccessor {
 
   @HostListener('blur')
   public onBlur(): void {
+    if (this._maskService.showOnFocus) {
+      this._maskService.focused = false;
+      this._maskService.applyValueChanges();
+    }
     this._maskService.clearIfNotMatchFn();
     this.onTouch();
   }
@@ -166,9 +178,20 @@ export class MaskDirective implements ControlValueAccessor {
       // tslint:disable-next-line
       (e as any).keyCode !== 38
     ) {
+      const position: number = (el.selectionStart as number) === 1
+          ? (el.selectionStart as number) + this._maskService.prefix.length
+          : el.selectionStart as number;
+      this._maskService.applyValueChanges();
+      if (this.document.activeElement !== el) {
+        return;
+      }
+      el.selectionStart = el.selectionEnd = position;
       return;
     }
-    if (this._maskService.showMaskTyped) {
+    if (this._maskService.showOnFocus) {
+      this.onInput( e as KeyboardEvent );
+    }
+    if (this._maskService.showMaskTyped || this._maskService.showOnFocus) {
       this._maskService.maskIsShown = this._maskService.showMaskInInput();
     }
     el.value = !el.value || el.value === this._maskService.prefix
@@ -218,7 +241,8 @@ export class MaskDirective implements ControlValueAccessor {
       this._maskService.isNumberValue = true;
     }
     inputValue && this._maskService.maskExpression ||
-      this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)
+      this._maskService.maskExpression &&
+      (this._maskService.prefix || (this._maskService.showMaskTyped || this._maskService.showOnFocus))
       ? (this._maskService.formElementProperty = [
         'value',
         this._maskService.applyMask(

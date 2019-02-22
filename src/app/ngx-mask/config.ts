@@ -6,6 +6,7 @@ export interface IConfig {
     clearIfNotMatch: boolean;
     showTemplate: boolean;
     showMaskTyped: boolean;
+    showOnFocus: boolean;
     shownMaskExpression: string;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
@@ -28,6 +29,7 @@ export const initialConfig: IConfig = {
     clearIfNotMatch: false,
     showTemplate: false,
     showMaskTyped: false,
+    showOnFocus: false,
     dropSpecialCharacters: true,
     shownMaskExpression: '',
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '\"', '\''],

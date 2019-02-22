@@ -13,6 +13,7 @@ import { IConfig } from 'public_api';
       [prefix]="prefix"
       [formControl]="form"
       [showMaskTyped] = "showMaskTyped"
+      [showOnFocus] = "showOnFocus"
       [(ngModel)]="ngModelValue">`,
 })
 export class TestMaskComponent {
@@ -26,4 +27,5 @@ export class TestMaskComponent {
   public sufix: IConfig['sufix'] = '';
   public specialCharacters!: IConfig['specialCharacters'];
   public showMaskTyped: IConfig['showMaskTyped'] = false;
+  public showOnFocus: IConfig['showOnFocus'] = false;
 }

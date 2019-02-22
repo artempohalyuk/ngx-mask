@@ -207,7 +207,7 @@ export class MaskApplierService {
                     }
                     result += inputSymbol;
                     cursor++;
-                } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
+                } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1 ) {
                     result += maskExpression[cursor];
                     cursor++;
                     const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
